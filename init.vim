@@ -3,8 +3,8 @@ set nu               " Enable line numbers
 set tabstop=4        " Show existing tab with 4 spaces width
 set softtabstop=4    " Show existing tab with 4 spaces width
 set shiftwidth=4     " When indenting with '>', use 4 spaces width
-set expandtab        " On pressing tab, insert 4 spaces
 set smarttab         " insert tabs on the start of a line according to shiftwidth
+set hlsearch
 set smartindent      " Automatically inserts one extra level of indentation in some cases
 set hidden           " Hides the current buffer when a new file is openned
 set incsearch        " Incremental search
@@ -20,7 +20,6 @@ set nowritebackup    " No backup files
 set splitright       " Create the vertical splits to the right
 set splitbelow       " Create the horizontal splits below
 set autoread         " Update vim after file update from outside
-set mouse=a          " Enable mouse support
 set timeoutlen=500
 set t_Co=256
 filetype on          " Detect and set the filetype option and trigger the FileType Event
@@ -30,6 +29,7 @@ filetype indent on   " Load the indent file for the file type, if any
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 Plug 'vim-airline/vim-airline'
 Plug 'elvessousa/sobrio'
+Plug 'bluz71/vim-moonfly-colors', { 'as': 'moonfly' }
 Plug 'sheerun/vim-polyglot'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
@@ -39,13 +39,24 @@ Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim' , { 'branch' : 'release' }
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-telescope/telescope-live-grep-args.nvim'
+
+"dart/flutter
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+Plug 'natebosch/vim-lsc'
+Plug 'natebosch/vim-lsc-dart'
+
 call plug#end()
 
 "Theme
-colorscheme sobrio
+colorscheme moonfly
+
+"Leader
 
 "Airline
-let g:airline_theme='sobrio'
+let g:airline_theme='moonfly'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
@@ -58,7 +69,9 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
 map q :quit<CR>
+map <C-n> :q!<CR>
 map <C-s> :w<CR>
 
 "Shortcuts for ESC
@@ -84,20 +97,12 @@ nmap oo A<CR>
 "Navigate between buffers
 nmap ty :bn<CR>
 nmap tr :bp<CR>
+nmap tw :bw<CR>
 
 "Find files using Telescope command-line sugar.
+nnoremap tt :Telescope<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-"HighlisthWotd func
-function! HighlightWordUnderCursor()
-    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
-        exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
-    else
-        match none
-    endif
-endfunction
-
-autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
