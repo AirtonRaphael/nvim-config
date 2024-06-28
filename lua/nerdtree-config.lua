@@ -1,0 +1,1 @@
+vim.g.WebDevIconsUnicodeDecorateFileNodes = 1
